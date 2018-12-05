@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+	<context:annotation-config/>
+<!-- ======================================================= -->
+
+<!-- DataSource를 사용하기 위한 JNDI 연결
+JNDIObjectbean에 대해 JNDI에서 발견된 객체를 검색한다. -->
+<bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
+	<property name="jndiName" value="java:comp/env/jdbc/myora"></property>
+</bean>
+
+<!-- mybatis 설정 -->
+
+<bean id="factoryBean" class="org.mybatis.spring.SqlSessionFactoryBean">
+	<property name="dataSource" ref="dataSource"></property>
+	<property name="configLocation" value="classpath:or/kosta/config/config.xml"></property>
+	<property name="mapperLocations" value="classpath*:or/kosta/mapper/*.xml"></property>
+</bean>
+
+<!-- mybatis template -->
+
+<bean id="ss" class="org.mybatis.spring.SqlSessionTemplate">
+	<constructor-arg ref="factoryBean"></constructor-arg>
+</bean>
+
+ 
+<!-- ======================================================= -->
+
+<!-- ViewResolver 객체 등록 
+		prefix = /WEB-INF/jsp/viewname 실제 경로와 뷰이름을 받을 property
+		suffix = 뷰이름 뒤에 append할 property
+-->
+<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+	<property name="prefix" value="/WEB-INF/jsp/"></property>
+	<property name="suffix" value=".jsp"></property>
+	<property name="order" value="1"></property>
+</bean>
+
+<!-- ======================================================= -->
+
+<!-- fileViewResolver -->
+<bean id="multipartResolver" 
+class="org.springframework.web.multipart.commons.CommonsMultipartResolver"/>
+<bean id="viewResolver1" class="org.springframework.web.servlet.view.ResourceBundleViewResolver">
+	<property name="order" value="0"/>
+	<property name="basename" value="views"/>
+</bean>
+
+</beans>

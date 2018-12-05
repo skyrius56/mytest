@@ -162,6 +162,24 @@
 		}
 		});
 	}
+	
+	 // 주소를 좌표로 변환
+	  function showAddress(address){
+
+	   if(geocoder){
+	    geocoder.getLatLng (address,
+	     function(point){
+	      if(!point){
+	       alert("'"+address + "' 를 찾지 못하였습니다.");
+	      }else {
+	     
+	    	  
+	      }
+	     }
+	    );
+	   }
+	 }
+
 
 	function distance(lat1, lon1, lat2, lon2, unit) {
         
@@ -226,6 +244,7 @@
 	<div>지정 위치 : <input type="text" id="baseLocation" ></div>
 	<div>현재 위치 : <input type="text" id="currentLocation" ></div>
 	<div>두 지점 사이의 거리 : <input type="text" id="distance" ></div>
+	<div>위치 검색 : <input type="text" id="locSearch" ><input type="button" value="검색"></div>
 </body>
 
 </html>
